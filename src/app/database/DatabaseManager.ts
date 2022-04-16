@@ -1,6 +1,6 @@
 import Database from '../domains/Database'
 import mariadb from 'mariadb'
-import log from '../domains/Logger'
+import log from '../services/Logger'
 import Role from '../domains/Role'
 import User from '../domains/User'
 

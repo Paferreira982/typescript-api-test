@@ -1,9 +1,10 @@
 import { Model, DataTypes } from 'sequelize'
+import { IUser } from '../interfaces/IUser'
 import sequelize from '../database/SequelizeConfig'
-import PasswordSecurity from './PasswordSecurity'
+import PasswordSecurity from '../services/PasswordSecurity'
 import Role from './Role'
 
-class User extends Model {
+class User extends Model implements IUser {
   declare id: number
   declare name: string
   declare username: string

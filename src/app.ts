@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import DatabaseManager from './app/database/DatabaseManager'
 import sequelize from './app/database/SequelizeConfig'
-import log from './app/domains/Logger'
+import log from './app/services/Logger'
 
 class App {
   public express : express.Application

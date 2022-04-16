@@ -10,7 +10,8 @@ class SequelizeConfig extends Database {
         dialect: 'mariadb',
         host: this.host,
         port: this.port,
-        timezone: this.timeZone
+        timezone: this.timeZone,
+        logging: false
       })
     }
 }

@@ -13,4 +13,4 @@ class ResponseManager {
   }
 }
 
-export default ResponseManager
+export default new ResponseManager()

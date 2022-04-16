@@ -126,7 +126,14 @@ class UserController implements IController {
   public async delete (req: Request, res: Response): Promise<Response> {
     try {
       const id = req.params.id
-      res.json(await User.destroy({ where: { id: id } }))
+      const deleted = (await User.destroy({ where: { id: id } }) > 0)
+
+      if (!deleted) throw ResponseManager.badRequest(`User with id: ${id}, does not exist`)
+
+      return ResponseManager.simpleResponse(res, {
+        message: `User with ${id} deleted with success.`,
+        status: 200
+      })
     } catch (error: unknown) {
       return ResponseManager.handleError(res, error)
     }

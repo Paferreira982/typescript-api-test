@@ -6,7 +6,7 @@ import sequelize from './app/database/SequelizeConfig'
 import log from './app/services/Logger'
 
 class App {
-  public express : express.Application
+  public express: express.Application
 
   public constructor () {
     log.info('[App] Initializing App.')
@@ -16,7 +16,7 @@ class App {
     this.middlewares()
   }
 
-  private async middlewares () : Promise<void> {
+  private async middlewares (): Promise<void> {
     // CONFIGURAÇÃO DO BANCO DE DADOS //
     await this.database()
 
@@ -27,7 +27,7 @@ class App {
     log.info('[App] App initialization completed.')
   }
 
-  private async database () : Promise<void> {
+  private async database (): Promise<void> {
     await DatabaseManager.createDatabase()
     await sequelize.sync()
     await DatabaseManager.prepareDatabase()

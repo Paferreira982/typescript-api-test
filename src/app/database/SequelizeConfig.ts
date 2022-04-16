@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize'
 import Database from '../domains/Database'
 
 class SequelizeConfig extends Database {
-    public sequelize : Sequelize
+    public sequelize: Sequelize
 
     public constructor () {
       super()

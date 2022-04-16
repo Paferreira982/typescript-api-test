@@ -39,7 +39,7 @@ User.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      set (password : string) {
+      set (password: string) {
         this.setDataValue('password', PasswordSecurity.hash(password))
       }
     },

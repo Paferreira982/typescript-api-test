@@ -5,7 +5,7 @@ import Role from '../domains/Role'
 import User from '../domains/User'
 
 class DatabaseManager extends Database {
-  public async createDatabase () : Promise<void> {
+  public async createDatabase (): Promise<void> {
     log.debug('[DatabaseManager] Creating database if not exists.')
     const pool = mariadb.createPool({
       host: this.host,
@@ -14,7 +14,7 @@ class DatabaseManager extends Database {
       connectionLimit: 5
     })
 
-    let conn : mariadb.PoolConnection
+    let conn: mariadb.PoolConnection
     try {
       conn = await pool.getConnection()
       await conn.query(`CREATE DATABASE IF NOT EXISTS ${this.name}`)
@@ -26,14 +26,14 @@ class DatabaseManager extends Database {
     }
   }
 
-  public async prepareDatabase () : Promise<void> {
+  public async prepareDatabase (): Promise<void> {
     log.info('[DatabaseManager] Preparing database.')
 
     // CRIANDO ROLES DEFAULT NA BASE DE DADOS //
     log.debug('[DatabaseManager] Creating default roles.')
     const roles = await Role.findAll()
     if (!roles || roles.length === 0) {
-      this.roles.forEach(async (role : string) => {
+      this.roles.forEach(async (role: string) => {
         const obj = Role.build({ name: role })
         await obj.save()
       })

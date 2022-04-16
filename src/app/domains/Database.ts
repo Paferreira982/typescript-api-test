@@ -1,18 +1,18 @@
 class Database {
     // VARIÁVEIS DE CONFIGURAÇÃO DO BANCO DE DADOS //
-    protected name : string
-    protected dbUsername : string
-    protected dbPassword : string
-    protected host : string
-    protected port : number
-    protected timeZone : string
+    protected name: string
+    protected dbUsername: string
+    protected dbPassword: string
+    protected host: string
+    protected port: number
+    protected timeZone: string
 
     // VARIÁVEIS DE CONFIGURAÇÃO DE USUÁRIO DEFAULT DO BANCO DE DADOS //
-    protected username : string
-    protected password : string
-    protected email : string
-    protected telephone : string
-    protected roles : string[]
+    protected username: string
+    protected password: string
+    protected email: string
+    protected telephone: string
+    protected roles: string[]
 
     public constructor () {
       // CONFIGURANDO VARIÁVEIS DO BANCO //

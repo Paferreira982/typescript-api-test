@@ -5,7 +5,7 @@ import { UniqueConstraintError } from 'sequelize'
 import log from './Logger'
 
 class ResponseManager {
-  public simpleResponse (res: Response, object: ISimpleReponse) : Response {
+  public simpleResponse (res: Response, object: ISimpleReponse): Response {
     log.debug(`[ResponseManager] ${object.message}`)
 
     return res.status(object.status).json({
@@ -14,7 +14,7 @@ class ResponseManager {
     }).end()
   }
 
-  public handleError (res: Response, error : unknown) : Response {
+  public handleError (res: Response, error: unknown): Response {
     // INSTANCIA DE ERRO DO YUP //
     if (error instanceof ValidationError) {
       return this.simpleResponse(res, {
@@ -39,7 +39,7 @@ class ResponseManager {
     })
   }
 
-  public badRequest (message: string) : ValidationError {
+  public badRequest (message: string): ValidationError {
     return new ValidationError(message)
   }
 }

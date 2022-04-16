@@ -1,9 +1,9 @@
 import * as logger from 'simple-node-logger'
 
 class Logger {
-    public log : logger.Logger
-    private level : string
-    private allLevels : string[]
+    public log: logger.Logger
+    private level: string
+    private allLevels: string[]
 
     public constructor () {
       // CONFIGURAÇÃO DO LOGGER //
@@ -15,7 +15,7 @@ class Logger {
       this.log.setLevel(this.defineLoggerLvl())
     }
 
-    private defineLoggerLvl () : logger.STANDARD_LEVELS {
+    private defineLoggerLvl (): logger.STANDARD_LEVELS {
       if (!this.allLevels.includes(this.level)) { return 'all' }
     }
 }

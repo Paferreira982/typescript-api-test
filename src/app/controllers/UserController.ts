@@ -114,13 +114,23 @@ class UserController implements IController {
     }
   }
 
-  //   public findAll (req: Request, res: Response): void {
+  public async findAll (req: Request, res: Response): Promise<Response> {
+    try {
+      const users = await User.findAll()
+      res.json(users)
+    } catch (error: unknown) {
+      return ResponseManager.handleError(res, error)
+    }
+  }
 
-  //   }
-
-  //   public delete (req: Request, res: Response): void {
-
-  //   }
+  public async delete (req: Request, res: Response): Promise<Response> {
+    try {
+      const id = req.params.id
+      res.json(await User.destroy({ where: { id: id } }))
+    } catch (error: unknown) {
+      return ResponseManager.handleError(res, error)
+    }
+  }
 }
 
 export default new UserController()

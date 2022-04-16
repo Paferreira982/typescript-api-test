@@ -4,18 +4,18 @@ module.exports = {
     es2021: true
   },
   extends: [
-    "plugin:@typescript-eslint/recommended",
-    "standard"
+    'plugin:@typescript-eslint/recommended',
+    'standard'
   ],
-  parser: "@typescript-eslint/parser",
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module"
+    ecmaVersion: 'latest',
+    sourceType: 'module'
   },
   plugins: [
-    "@typescript-eslint"
+    '@typescript-eslint'
   ],
   rules: {
-    quotes: ["error", "double"]
+    quotes: ['error', 'single']
   }
 }

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "sucrase-node src/index.ts",
+    "debug": "node --inspect -r sucrase/register",
     "build": "",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,14 +20,26 @@
   },
   "homepage": "https://github.com/Paferreira982/ritter-api#readme",
   "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mariadb": "^3.0.0",
+    "sequelize": "^6.19.0",
+    "simple-node-logger": "^21.8.12",
     "sucrase": "^3.20.3",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "yup": "^0.32.11"
   }
 }

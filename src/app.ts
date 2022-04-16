@@ -11,20 +11,20 @@ class App {
   public constructor () {
     log.info('[App] Initializing App.')
 
-    // CONFIGURAÇÃO DO BANCO DE DADOS //
-    this.database()
-
     // CONFIGURAÇÕES DO EXPRESS //
     this.express = express()
     this.middlewares()
-
-    log.info('[App] App initialization completed.')
   }
 
-  private middlewares () : void {
+  private async middlewares () : Promise<void> {
+    // CONFIGURAÇÃO DO BANCO DE DADOS //
+    await this.database()
+
     this.express.use(express.json())
     this.express.use(router)
     this.express.use(cors())
+
+    log.info('[App] App initialization completed.')
   }
 
   private async database () : Promise<void> {

@@ -1,9 +1,11 @@
 import { Request, Response } from 'express'
-import { object, string, ObjectSchema } from 'yup'
-import log from '../services/Logger'
+import { object, string, ObjectSchema, array } from 'yup'
 import { IUser } from '../interfaces/IUser'
-import User from '../domains/User'
+import log from '../services/Logger'
 import ResponseManager from '../services/ResponseManager'
+
+import User from '../domains/User'
+import Role from '../domains/Role'
 
 class UserController {
   public async create (req: Request, res: Response) : Promise<Response> {
@@ -15,29 +17,40 @@ class UserController {
       name: string().required(),
       username: string().required(),
       password: string().required(),
-      email: string().nullable(),
-      telephone: string().nullable()
+      email: string().notRequired(),
+      telephone: string().notRequired(),
+      roles: array().of(string()).notRequired()
     })
 
+    const body = req.body
+    let roles : Role[]
+
     try {
-      await schema.validate(req.body)
-      await User.create(req.body)
+      // VALIDA O SCHEMA DESCRITO ACIMA //
+      await schema.validate(body)
+
+      if (body.roles) {
+        for (const i in body.roles) {
+          const name = body.roles[i]
+          const role = await Role.findOne({ where: { name: name } })
+
+          if (!role) throw ResponseManager.badRequest(`the role '${name}' does not exist`)
+
+          if (!roles) roles = [role]
+          else roles.push(role)
+        }
+      }
+
+      await User.create(body).then((user) => {
+        if (roles && roles.length > 0) user.setRoles(roles)
+      })
+
       return ResponseManager.simpleResponse(res, {
-        message: `User ${req.body.username} created with success.`,
+        message: `User ${body.username} created with success.`,
         status: 201
       })
-    } catch (err: unknown) {
-      if (err.toString().includes('ValidationError')) {
-        return ResponseManager.simpleResponse(res, {
-          message: `${err}`.replace('ValidationError:', 'BadRequest:'),
-          status: 400
-        })
-      }
-      log.error(`[UserController] ${err}`)
-      return ResponseManager.simpleResponse(res, {
-        message: `Internal server error: ${err}`,
-        status: 500
-      })
+    } catch (error: unknown) {
+      return ResponseManager.handleError(res, error)
     }
   }
 

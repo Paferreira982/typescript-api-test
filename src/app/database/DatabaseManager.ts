@@ -6,7 +6,7 @@ import User from '../domains/User'
 
 class DatabaseManager extends Database {
   public async createDatabase () : Promise<void> {
-    log.info('[DatabaseManager] Creating database if not exists.')
+    log.debug('[DatabaseManager] Creating database if not exists.')
     const pool = mariadb.createPool({
       host: this.host,
       user: this.dbUsername,
@@ -22,7 +22,7 @@ class DatabaseManager extends Database {
       log.error(`[DatabaseManager] Error while connecting to database ${this.host}/${this.name}}.`)
     } finally {
       if (conn) conn.end()
-      log.info('[DatabaseManager] Database created or already exists.')
+      log.debug('[DatabaseManager] Database created or already exists.')
     }
   }
 
@@ -41,9 +41,10 @@ class DatabaseManager extends Database {
     log.debug('[DatabaseManager] Default roles created.')
 
     // CRIANDO USUÁRIO ADMINISTRADOR PADRÃO //
-    log.debug('[DatabaseManager] Creating default user.')
     const admin = await User.findOne({ where: { name: this.username } })
     if (!admin) {
+      log.debug('[DatabaseManager] Creating default user.')
+
       const role = await Role.findOne({ where: { name: this.roles[0] } })
       await User.create({
         name: this.username,
@@ -53,7 +54,7 @@ class DatabaseManager extends Database {
         telephone: this.telephone
       })
 
-      User.findOne({ where: { username: this.username } }).then((user) => {
+      await User.findOne({ where: { username: this.username } }).then((user) => {
         user.setRoles([role])
       }).finally(() => {
         log.debug('[DatabaseManager] Default user created.')

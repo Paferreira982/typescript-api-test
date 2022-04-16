@@ -5,9 +5,11 @@ import { IUser } from '../interfaces/IUser'
 import User from '../domains/User'
 import ResponseManager from '../services/ResponseManager'
 
-class UserController extends ResponseManager {
+class UserController {
   public async create (req: Request, res: Response) : Promise<Response> {
     log.debug('[UserController] Executing create method.')
+
+    const service = new ResponseManager()
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -22,13 +24,19 @@ class UserController extends ResponseManager {
     try {
       await schema.validate(req.body)
       await User.create(req.body)
-      return this.simpleResponse(res, {
+      return service.simpleResponse(res, {
         message: `User ${req.body.username} created with success.`,
         status: 201
       })
     } catch (err: unknown) {
-      log.error(err)
-      return this.simpleResponse(res, {
+      if (err.toString().includes('ValidationError')) {
+        return service.simpleResponse(res, {
+          message: `${err}`.replace('ValidationError:', 'BadRequest:'),
+          status: 400
+        })
+      }
+      log.error(`[UserController] ${err}`)
+      return service.simpleResponse(res, {
         message: `Internal server error: ${err}`,
         status: 500
       })

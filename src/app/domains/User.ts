@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize'
 import sequelize from '../database/SequelizeConfig'
-import PasswordSecurity from '../domains/PasswordSecurity'
+import PasswordSecurity from './PasswordSecurity'
 import Role from './Role'
 
 class User extends Model {

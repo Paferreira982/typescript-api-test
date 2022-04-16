@@ -1,8 +1,8 @@
 import Database from '../domains/Database'
 import mariadb from 'mariadb'
 import log from '../domains/Logger'
-import Role from '../models/Role'
-import User from '../models/User'
+import Role from '../domains/Role'
+import User from '../domains/User'
 
 class DatabaseManager extends Database {
   public async createDatabase () : Promise<void> {

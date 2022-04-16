@@ -52,6 +52,7 @@ class DatabaseManager extends Database {
         email: this.email,
         telephone: this.telephone
       })
+
       User.findOne({ where: { username: this.username } }).then((user) => {
         user.setRoles([role])
       }).finally(() => {

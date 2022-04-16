@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import DatabaseManager from './app/database/DatabaseManager'
-import Models from './app/models/Models'
+import sequelize from './app/database/SequelizeConfig'
 import log from './app/domains/Logger'
 
 class App {
@@ -27,7 +27,7 @@ class App {
 
   private async database () : Promise<void> {
     await DatabaseManager.createDatabase()
-    await Models.sync()
+    await sequelize.sync()
     await DatabaseManager.prepareDatabase()
   }
 }

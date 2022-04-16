@@ -1,45 +1,62 @@
-import Sequelize from 'sequelize'
+import { Model, DataTypes } from 'sequelize'
 import sequelize from '../database/SequelizeConfig'
 import PasswordSecurity from '../domains/PasswordSecurity'
 import Role from './Role'
 
-const User = sequelize.define('user', {
-  id: {
-    type: Sequelize.BIGINT,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true
-  },
+class User extends Model {
+  declare id: number
+  declare name: string
+  declare username: string
+  declare password: string
+  declare email: string | null
+  declare telephone: string | null
 
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setRoles: any
+}
 
-  username: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true
-  },
+User.init(
+  {
+    id: {
+      type: DataTypes.BIGINT,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true
+    },
 
-  password: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    set (password : string) {
-      this.setDataValue('password', PasswordSecurity.hash(password))
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      set (password : string) {
+        this.setDataValue('password', PasswordSecurity.hash(password))
+      }
+    },
+
+    email: {
+      type: DataTypes.STRING,
+      unique: true
+    },
+
+    telephone: {
+      type: DataTypes.STRING,
+      unique: true
     }
   },
-
-  email: {
-    type: Sequelize.STRING,
-    unique: true
-  },
-
-  telephone: {
-    type: Sequelize.STRING,
-    unique: true
-  }
-})
+  {
+    tableName: 'users',
+    sequelize
+  })
 
 User.belongsToMany(Role, { through: 'users_roles' })
 Role.belongsToMany(User, { through: 'users_roles' })

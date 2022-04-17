@@ -11,7 +11,6 @@ class App {
   public constructor () {
     log.info('[App] Initializing App.')
 
-    // CONFIGURAÇÕES DO EXPRESS //
     this.express = express()
     this.middlewares()
   }
@@ -20,6 +19,7 @@ class App {
     // CONFIGURAÇÃO DO BANCO DE DADOS //
     await this.database()
 
+    // CONFIGURAÇÕES DO EXPRESS //
     this.express.use(express.json())
     this.express.use(router)
     this.express.use(cors())

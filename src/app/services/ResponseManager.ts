@@ -8,6 +8,7 @@ class ResponseManager {
   public simpleResponse (res: Response, object: ISimpleReponse): Response {
     log.debug(`[ResponseManager] ${object.message}`)
 
+    // RESPOSTA SIMPLE DA API //
     return res.status(object.status).json({
       message: object.message,
       status: object.status
@@ -23,6 +24,7 @@ class ResponseManager {
       })
     }
 
+    // INSTANCIA DE ERRO DO SEQUELIZE, CASO DE VIOLÃO DA CONSTRAINT UNIQUE //
     if (error instanceof UniqueConstraintError) {
       return this.simpleResponse(res, {
         message: `BadRequest: ${error.errors[0].message}`,
@@ -40,6 +42,7 @@ class ResponseManager {
   }
 
   public badRequest (message: string): ValidationError {
+    // EMITE UM 'THROW' PARA TRATAMENTO DE CASOS DE ERRO 'BAD REQUEST'
     return new ValidationError(message)
   }
 }

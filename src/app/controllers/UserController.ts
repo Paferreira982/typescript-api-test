@@ -31,11 +31,14 @@ class UserController implements IController {
       // VALIDA O SCHEMA DESCRITO ACIMA //
       await schema.validate(body)
 
+      // VERIFICA SE ROLES FOI PASSADO COMO PARÂMETRO DENTRO DO BODY //
+      // SE SIM, PREENCHE UMA LISTA DE OBJETO 'ROLE' //
       if (body.roles) {
         for (const i in body.roles) {
           const name = body.roles[i]
           const role = await Role.findOne({ where: { name: name } })
 
+          // DELEGA RESPOSTA DE ERRO PARA O SERVICE CASO NÃO ENCONTRE A ROLE MENCIONADA //
           if (!role) throw ResponseManager.badRequest(`the role '${name}' does not exist`)
 
           if (!roles) roles = [role]
@@ -43,15 +46,18 @@ class UserController implements IController {
         }
       }
 
+      // CRIA O USUÁRIO NO BANCO DE DADOS DE ACORDO COM OS PARÂMETROS PASSADOS //
       await User.create(body).then((user) => {
         if (roles && roles.length > 0) user.setRoles(roles)
       })
 
+      // DELEGA RESPOSTA DE CASO BEM SUCEDIDO PARA O SERVICE //
       return ResponseManager.simpleResponse(res, {
         message: `User ${body.username} created with success.`,
         status: 201
       })
     } catch (error: unknown) {
+      // DELEGA TRATAMENTO DE CASOS DE ERRO PARA O SERVICE //
       return ResponseManager.handleError(res, error)
     }
   }
@@ -78,10 +84,11 @@ class UserController implements IController {
       await schema.validate(body)
 
       const user = await User.findOne({ where: { id: body.id } })
+      // DELEGA RESPOSTA DE ERRO PARA O SERVICE CASO NÃO ENCONTRE O USUÁRIO MENCIONADO //
       if (!user) throw ResponseManager.badRequest(`the user with id = ${body.id}, does not exist`)
 
+      // PREENCHE OBJETO DE REQUISIÇÃO DESCRITO PELA INTERFACE //
       const updatedUser: IUserUpdate = {}
-
       if (body.name) updatedUser.name = body.name
       if (body.username) updatedUser.username = body.username
       if (body.password) updatedUser.password = body.password
@@ -89,6 +96,7 @@ class UserController implements IController {
       if (body.telephone) updatedUser.telephone = body.telephone
       if (body.roles) updatedUser.roles = body.roles
 
+      // ATUALIZA O USUÁRIO MENCIONADO COM OS PARÂMETROS ENVIADOS //
       await User.findOne({ where: { id: body.id }, include: Role }).then(async (user) => {
         await user.update(updatedUser)
 
@@ -105,20 +113,25 @@ class UserController implements IController {
         await user.setRoles(roles)
       })
 
+      // DELEGA RESPOSTA DE CASO BEM SUCEDIDO PARA O SERVICE //
       return ResponseManager.simpleResponse(res, {
         message: `User ${(body.username) ? body.username : body.id} updated with success.`,
         status: 200
       })
     } catch (error: unknown) {
+      // DELEGA TRATAMENTO DE CASOS DE ERRO PARA O SERVICE //
       return ResponseManager.handleError(res, error)
     }
   }
 
   public async findAll (req: Request, res: Response): Promise<Response> {
     try {
-      const users = await User.findAll()
-      res.json(users)
+      // BUSCA TODOS OS ELEMENTOS DA BASE SEM FILTRO //
+      User.findAll().then((users) => {
+        res.status(200).json(users).end()
+      })
     } catch (error: unknown) {
+      // DELEGA TRATAMENTO DE CASOS DE ERRO PARA O SERVICE //
       return ResponseManager.handleError(res, error)
     }
   }
@@ -128,13 +141,16 @@ class UserController implements IController {
       const id = req.params.id
       const deleted = (await User.destroy({ where: { id: id } }) > 0)
 
+      // DELEGA RESPOSTA DE ERRO PARA O SERVICE CASO NÃO ENCONTRE O USUÁRIO MENCIONADO //
       if (!deleted) throw ResponseManager.badRequest(`User with id: ${id}, does not exist`)
 
+      // DELEGA RESPOSTA DE CASO BEM SUCEDIDO PARA O SERVICE //
       return ResponseManager.simpleResponse(res, {
         message: `User with ${id} deleted with success.`,
         status: 200
       })
     } catch (error: unknown) {
+      // DELEGA TRATAMENTO DE CASOS DE ERRO PARA O SERVICE //
       return ResponseManager.handleError(res, error)
     }
   }

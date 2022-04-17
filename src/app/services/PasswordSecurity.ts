@@ -8,10 +8,13 @@ class PasswordSecurity {
     }
 
     public hash (password: string): string {
+      // ENCRIPTA UMA SENHA PARA MAIOR SEGURANÇA NA BASE DE DADOS //
       return bcrypt.hashSync(password, bcrypt.genSaltSync(this.salt))
     }
 
     public verify (password: string, hashedPassword: string): boolean {
+      // COMPARA UMA STRING NÃO ENCRIPTADA COM SUA RESPECTIVA STRING ENCRIPTADA DA BASE //
+      // TRUE CASO SEJAM AS MESMA E FALSE CASO NÃO //
       return bcrypt.compareSync(password, hashedPassword)
     }
 }

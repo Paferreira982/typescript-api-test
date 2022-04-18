@@ -1,8 +1,7 @@
 import { Request, Response } from 'express'
 import { object, string, ObjectSchema, array, number } from 'yup'
 import { IController } from '../interfaces/IController'
-import { Op } from 'sequelize'
-import { IUser, IUserUpdate } from '../interfaces/IUser'
+import { IUser } from '../interfaces/IUser'
 import log from '../services/Logger'
 import ResponseManager from '../services/ResponseManager'
 
@@ -87,30 +86,22 @@ class UserController implements IController {
       // DELEGA RESPOSTA DE ERRO PARA O SERVICE CASO NÃO ENCONTRE O USUÁRIO MENCIONADO //
       if (!user) throw ResponseManager.badRequest(`the user with id = ${body.id}, does not exist`)
 
-      // PREENCHE OBJETO DE REQUISIÇÃO DESCRITO PELA INTERFACE //
-      const updatedUser: IUserUpdate = {}
-      if (body.name) updatedUser.name = body.name
-      if (body.username) updatedUser.username = body.username
-      if (body.password) updatedUser.password = body.password
-      if (body.email) updatedUser.email = body.email
-      if (body.telephone) updatedUser.telephone = body.telephone
-      if (body.roles) updatedUser.roles = body.roles
-
       // ATUALIZA O USUÁRIO MENCIONADO COM OS PARÂMETROS ENVIADOS //
       await User.findOne({ where: { id: body.id }, include: Role }).then(async (user) => {
-        await user.update(updatedUser)
+        await user.update(body)
 
-        const whereClasule = []
-        if (updatedUser.roles) {
-          for (const i in updatedUser.roles) {
-            whereClasule.push({ name: updatedUser.roles[i] })
+        let roles : Role[]
+        if (body.roles) {
+          for (const i in body.roles) {
+            const role = await Role.findOne({ where: { name: body.roles[i] } })
+            if (!role) throw ResponseManager.badRequest(`the role '${body.roles[i]}' does not exist`)
+
+            if (!roles) roles = [role]
+            else roles.push(role)
           }
-        }
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const roles = await Role.findAll({ where: { [Op.or]: whereClasule } })
-        await user.setRoles(roles)
+          await user.setRoles(roles)
+        }
       })
 
       // DELEGA RESPOSTA DE CASO BEM SUCEDIDO PARA O SERVICE //
@@ -124,12 +115,19 @@ class UserController implements IController {
     }
   }
 
-  public async findAll (req: Request, res: Response): Promise<Response> {
+  public async find (req: Request, res: Response): Promise<Response> {
+    log.debug('[UserController] Executing find endpoint.')
     try {
-      // BUSCA TODOS OS ELEMENTOS DA BASE SEM FILTRO //
-      User.findAll().then((users) => {
-        res.status(200).json(users).end()
-      })
+      let response : User | User[]
+      if (req.params.id) {
+        // BUSCA USUÁRIO PELA PRIMARY KEY //
+        response = await User.findByPk(req.params.id, { include: Role })
+      } else {
+        // BUSCA TODOS OS ELEMENTOS DA BASE SEM FILTRO //
+        response = await User.findAll({ include: Role })
+      }
+
+      return res.status(200).json(response).end()
     } catch (error: unknown) {
       // DELEGA TRATAMENTO DE CASOS DE ERRO PARA O SERVICE //
       return ResponseManager.handleError(res, error)
@@ -137,6 +135,7 @@ class UserController implements IController {
   }
 
   public async delete (req: Request, res: Response): Promise<Response> {
+    log.debug('[UserController] Executing delete endpoint.')
     try {
       const id = req.params.id
       const deleted = (await User.destroy({ where: { id: id } }) > 0)

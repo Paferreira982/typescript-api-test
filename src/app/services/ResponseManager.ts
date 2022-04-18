@@ -8,7 +8,7 @@ class ResponseManager {
   public simpleResponse (res: Response, object: ISimpleReponse): Response {
     log.debug(`[ResponseManager] ${object.message}`)
 
-    // RESPOSTA SIMPLE DA API //
+    // RESPOSTA SIMPLES DA API //
     return res.status(object.status).json({
       message: object.message,
       status: object.status
@@ -16,7 +16,7 @@ class ResponseManager {
   }
 
   public handleError (res: Response, error: unknown): Response {
-    // INSTANCIA DE ERRO DO YUP //
+    // INSTANCIA DE ERRO DE VALIDAÇÃO DO YUP //
     if (error instanceof ValidationError) {
       return this.simpleResponse(res, {
         message: `BadRequest: ${error.errors}`,

@@ -28,8 +28,7 @@ class ResponseManager {
     if (error instanceof UniqueConstraintError) {
       return this.simpleResponse(res, {
         message: `BadRequest: ${error.errors[0].message}`,
-        status: 400,
-        type: error.errors[0].type
+        status: 400
       })
     }
 

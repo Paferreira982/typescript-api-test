@@ -1,3 +1,4 @@
+// DEPENDENCIES //
 import { Sequelize } from 'sequelize'
 import Database from '../domains/Database'
 

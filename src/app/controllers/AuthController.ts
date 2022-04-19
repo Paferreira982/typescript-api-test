@@ -1,6 +1,8 @@
 // DEPENDENCIES //
 import { object, string, ObjectSchema } from 'yup'
 import { Request, Response } from 'express'
+
+// INTERFACES //
 import { IAuth } from '../interfaces/IUser'
 
 // SERVICES //

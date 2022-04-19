@@ -1,4 +1,7 @@
+// DEPENDENCIES //
 import express from 'express'
+
+// SERVICES //
 import AuthController from '../controllers/AuthController'
 
 const router = express.Router()

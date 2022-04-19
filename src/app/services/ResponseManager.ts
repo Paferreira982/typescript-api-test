@@ -1,13 +1,28 @@
+// DEPENDENCIES //
 import { Response } from 'express'
-import { ISimpleReponse } from '../interfaces/IRespose'
 import { ValidationError } from 'yup'
 import { UniqueConstraintError } from 'sequelize'
-import UnauthorizedError from '../domains/UnauthorizedError'
+
+// INTERFACES //
+import { ISimpleReponse } from '../interfaces/IRespose'
 
 // SERVICES //
 import log from './Logger'
 
+// DOMAINS //
+import UnauthorizedError from '../domains/UnauthorizedError'
+
+/**
+ * @author Pedro Augusto
+ * @description Managment of common response and erros to API.
+ */
 class ResponseManager {
+  /**
+  * @description Produces a simple response to API's endpoints.
+  * @param res The express response.
+  * @param object An object from ISimpleResponse interface.
+  * @returns Return a response to API.
+  */
   public simpleResponse (res: Response, object: ISimpleReponse): Response {
     log.debug(`[ResponseManager] ${object.message}`)
 
@@ -18,11 +33,21 @@ class ResponseManager {
     }).end()
   }
 
+  /**
+  * @description Produces an invalidation error instance for BadRequest clasule.
+  * @param message A simple describe of the error.
+  * @returns Returns a ValidationError instance from yup.
+  */
   public badRequest (message: string): ValidationError {
-    // EMITE UM 'THROW' PARA TRATAMENTO DE CASOS DE ERRO 'BAD REQUEST'
     return new ValidationError(message)
   }
 
+  /**
+  * @description Handle the know error cases from API's endpoints.
+  * @param res The express response.
+  * @param error The error clasule from catch.
+  * @returns Return a response to API.
+  */
   public handleError (res: Response, error: unknown): Response {
     // INSTANCIA DE ERRO DE VALIDAÇÃO DO YUP //
     if (error instanceof ValidationError) {

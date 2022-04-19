@@ -1,7 +1,14 @@
+// DEPENDENCIES //
 import { Model, DataTypes } from 'sequelize'
-import { IUser } from '../interfaces/IUser'
 import sequelize from '../database/SequelizeConfig'
+
+// INTERFACES //
+import { IUser } from '../interfaces/IUser'
+
+// SERVICES //
 import PasswordSecurity from '../services/security/PasswordSecurity'
+
+// DOMAINS //
 import Role from './Role'
 
 /**

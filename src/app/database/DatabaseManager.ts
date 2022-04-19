@@ -1,6 +1,11 @@
+// DEPENDENCIES //
 import Database from '../domains/Database'
 import mariadb from 'mariadb'
+
+// SERVICES //
 import log from '../services/Logger'
+
+// DOMAINS
 import Role from '../domains/Role'
 import User from '../domains/User'
 

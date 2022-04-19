@@ -1,3 +1,4 @@
+// DEPENDENCIES //
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
 /**

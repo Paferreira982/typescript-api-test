@@ -4,6 +4,10 @@ import sequelize from '../database/SequelizeConfig'
 import PasswordSecurity from '../services/security/PasswordSecurity'
 import Role from './Role'
 
+/**
+ * @author Pedro Augusto
+ * @description Sets properties for Sequelize.
+ */
 class User extends Model implements IUser {
   declare id: number
   declare name: string

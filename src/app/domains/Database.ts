@@ -1,5 +1,9 @@
+/**
+ * @author Pedro Augusto
+ * @description Prepares variables for the database from environment.
+ */
 class Database {
-    // VARIÁVEIS DE CONFIGURAÇÃO DO BANCO DE DADOS //
+    // DATABASE CONFIGURATION VARIABLES //
     protected name: string
     protected dbUsername: string
     protected dbPassword: string
@@ -7,7 +11,7 @@ class Database {
     protected port: number
     protected timeZone: string
 
-    // VARIÁVEIS DE CONFIGURAÇÃO DE USUÁRIO DEFAULT DO BANCO DE DADOS //
+    // DATABASE DEFAULT USER CONFIGURATION VARIABLES //
     protected username: string
     protected password: string
     protected email: string
@@ -15,7 +19,7 @@ class Database {
     protected roles: string[]
 
     public constructor () {
-      // CONFIGURANDO VARIÁVEIS DO BANCO //
+      // SETTING DATABASE VARIABLES //
       this.name = process.env.DB_NAME || 'ritter'
       this.dbUsername = process.env.DB_USER || 'root'
       this.dbPassword = process.env.DB_PASSWORD || 'admin123'
@@ -23,7 +27,7 @@ class Database {
       this.port = parseInt(process.env.DB_PORT) || 3306
       this.timeZone = process.env.DB_TZ || 'America/Sao_Paulo'
 
-      // CONFIGURANDO VARIÁVEIS DO USUÁRIO DEFAULT //
+      // SETTING DEFAULT USER VARIABLES //
       this.username = process.env.USER_NAME || 'admin'
       this.password = process.env.USER_PASSWORD || 'admin123'
       this.email = process.env.USER_EMAIL || 'contato@paferreira.com'

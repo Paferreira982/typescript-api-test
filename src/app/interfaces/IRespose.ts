@@ -1,4 +1,7 @@
-// INTERFACE PARA AUXÍLIO DE MÉTODOS DE RESPOSTA SIMPLES DA API //
+/**
+ * @author Pedro Augusto
+ * @description Default interface for simple api response.
+ */
 export interface ISimpleReponse {
     message: string,
     status: number,

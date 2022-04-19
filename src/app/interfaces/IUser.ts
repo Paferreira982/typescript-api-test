@@ -1,4 +1,7 @@
-// INTERFACE PARA AUXÍLIO DE MÉTODOS DE USER //
+/**
+ * @author Pedro Augusto
+ * @description Default interface for user object methods.
+ */
 export interface IUser {
     id?: number
     name: string
@@ -9,8 +12,11 @@ export interface IUser {
     roles?: string[]
 }
 
-// INTERFACE PARA AUXÍLIO EM MÉTODOS DE AUTÊNTICAÇÃO //
+/**
+ * @author Pedro Augusto
+ * @description Standard interface for authentication methods.
+ */
 export interface IAuth {
-    username: string
+    username: string,
     password: string
 }

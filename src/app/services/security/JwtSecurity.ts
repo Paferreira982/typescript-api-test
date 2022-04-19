@@ -17,7 +17,7 @@ class JwtSecurity {
     /**
     * @description Capture a payload to codify in a jwt token.
     * @param payload User payload.
-    * @returns A jwt token.
+    * @returns Returns a jwt token.
     */
     public sign (payload: Record<string, unknown>): string {
       return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn })
@@ -26,7 +26,7 @@ class JwtSecurity {
     /**
     * @description Captura a token and verify if its valid.
     * @param token A jwt token.
-    * @returns A string containing an error of a JwtPayload object.
+    * @returns Returns a string containing an error of a JwtPayload object.
     */
     public verify (token: string) : string | JwtPayload {
       return jwt.verify(token, this.secret)

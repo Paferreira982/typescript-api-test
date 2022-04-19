@@ -21,7 +21,7 @@ import Role from '../domains/Role'
 class AuthController {
   /**
    * @description Capture from request, username and password and validate into a jwt token.
-   * @returns A Payload message with jwt token.
+   * @returns Returns a Payload message with jwt token.
    */
   public async login (req: Request, res: Response): Promise<Response> {
     const body = req.body

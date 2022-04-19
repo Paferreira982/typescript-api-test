@@ -12,7 +12,15 @@ import JwtSecurity from '../services/security/JwtSecurity'
 import User from '../domains/User'
 import Role from '../domains/Role'
 
+/**
+ * @author Pedro Augusto
+ * @description Managment of auth request from user to API.
+ */
 class AuthController {
+  /**
+   * @description Capture from request, username and password and validate into a jwt token.
+   * @returns A Payload message with jwt token.
+   */
   public async login (req: Request, res: Response): Promise<Response> {
     const body = req.body
 
@@ -24,7 +32,6 @@ class AuthController {
     })
 
     try {
-      // VALIDA O SCHEMA DESCRITO ACIMA //
       await schema.validate(body)
 
       const user = await User.findOne({ where: { username: body.username }, include: Role })
@@ -38,7 +45,6 @@ class AuthController {
         user: user.username
       })
     } catch (error: unknown) {
-      // DELEGA TRATAMENTO DE CASOS DE ERRO PARA O SERVICE //
       return ResponseManager.handleError(res, error)
     }
   }

@@ -1,3 +1,4 @@
+// DEPENDENCIES //
 import { Request, Response } from 'express'
 import { object, string, ObjectSchema, array, number } from 'yup'
 import { IController } from '../interfaces/IController'
@@ -11,7 +12,15 @@ import ResponseManager from '../services/ResponseManager'
 import User from '../domains/User'
 import Role from '../domains/Role'
 
+/**
+ * @author Pedro Augusto
+ * @description Managment of user's request and response.
+ */
 class UserController implements IController {
+  /**
+  * @description Persists an entity in the database.
+  * @returns Return a payload of a simple response.
+  */
   public async create (req: Request, res: Response): Promise<Response> {
     log.debug('[UserController] Executing create endpoint.')
 
@@ -64,6 +73,10 @@ class UserController implements IController {
     }
   }
 
+  /**
+  * @description Updates an existing entity in the database.
+  * @returns Return a payload of a simple response.
+  */
   public async update (req: Request, res: Response): Promise<Response> {
     log.debug('[UserController] Executing update endpoint.')
 
@@ -118,6 +131,11 @@ class UserController implements IController {
     }
   }
 
+  /**
+  * @description Find an existing entity in the database.
+  * @param req Can recieve an id param from request, otherwise returns all entitys.
+  * @returns Return an list of user or an user if has an id param.
+  */
   public async find (req: Request, res: Response): Promise<Response> {
     log.debug('[UserController] Executing find endpoint.')
     try {
@@ -139,6 +157,11 @@ class UserController implements IController {
     }
   }
 
+  /**
+  * @description Delete an existing entity in the database.
+  * @param req Require an id param inside the request.
+  * @returns Return a payload of a simple response.
+  */
   public async delete (req: Request, res: Response): Promise<Response> {
     log.debug('[UserController] Executing delete endpoint.')
     try {

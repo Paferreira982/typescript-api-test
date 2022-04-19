@@ -14,7 +14,7 @@ import Role from '../domains/Role'
 
 /**
  * @author Pedro Augusto
- * @description Managment of auth request from user to API.
+ * @description Managment of auth request and response.
  */
 class AuthController {
   /**

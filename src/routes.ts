@@ -1,5 +1,7 @@
+// DEPENDENCIES //
 import express from 'express'
 
+// SERVICES //
 import AuthRote from './app/routes/AuthRote'
 import UserRoute from './app/routes/UserRoute'
 

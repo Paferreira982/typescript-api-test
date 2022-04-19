@@ -1,10 +1,17 @@
+// DEPENDENCIES //
 import express from 'express'
 import router from './routes'
 import cors from 'cors'
 import DatabaseManager from './app/database/DatabaseManager'
 import sequelize from './app/database/SequelizeConfig'
+
+// SERVICES //
 import log from './app/services/Logger'
 
+/**
+ * @author Pedro Augusto
+ * @description Sets the initial configurations of the aplication.
+ */
 class App {
   public express: express.Application
 
@@ -15,11 +22,12 @@ class App {
     this.middlewares()
   }
 
+  /**
+  * @description Sets the middlewares dependencies in express instance.
+  */
   private async middlewares (): Promise<void> {
-    // CONFIGURAÇÃO DO BANCO DE DADOS //
     await this.database()
 
-    // CONFIGURAÇÕES DO EXPRESS //
     this.express.use(express.json())
     this.express.use(router)
     this.express.use(cors())
@@ -27,6 +35,9 @@ class App {
     log.info('[App] App initialization completed.')
   }
 
+  /**
+  * @description Calls the database syncronizing and configuration methods.
+  */
   private async database (): Promise<void> {
     await DatabaseManager.createDatabase()
     await sequelize.sync()

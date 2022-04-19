@@ -1,8 +1,12 @@
 import express from 'express'
+
+import AuthRote from './app/routes/AuthRote'
 import UserRoute from './app/routes/UserRoute'
 
 const router = express.Router()
+const path = '/ritter/api'
 
-router.use('/users', UserRoute)
+router.use(`${path}/auth`, AuthRote)
+router.use(`${path}/users`, UserRoute)
 
 export default router

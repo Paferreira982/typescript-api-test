@@ -8,3 +8,9 @@ export interface IUser {
     telephone?: string
     roles?: string[]
 }
+
+// INTERFACE PARA AUXÍLIO EM MÉTODOS DE AUTÊNTICAÇÃO //
+export interface IAuth {
+    username: string
+    password: string
+}

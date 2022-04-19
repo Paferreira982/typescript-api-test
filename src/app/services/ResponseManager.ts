@@ -2,6 +2,9 @@ import { Response } from 'express'
 import { ISimpleReponse } from '../interfaces/IRespose'
 import { ValidationError } from 'yup'
 import { UniqueConstraintError } from 'sequelize'
+import UnauthorizedError from '../domains/UnauthorizedError'
+
+// SERVICES //
 import log from './Logger'
 
 class ResponseManager {
@@ -13,6 +16,11 @@ class ResponseManager {
       message: object.message,
       status: object.status
     }).end()
+  }
+
+  public badRequest (message: string): ValidationError {
+    // EMITE UM 'THROW' PARA TRATAMENTO DE CASOS DE ERRO 'BAD REQUEST'
+    return new ValidationError(message)
   }
 
   public handleError (res: Response, error: unknown): Response {
@@ -32,17 +40,19 @@ class ResponseManager {
       })
     }
 
+    if (error instanceof UnauthorizedError) {
+      return this.simpleResponse(res, {
+        message: `Unauthorized: ${error.message}`,
+        status: 401
+      })
+    }
+
     // INSTANCIA DE ERRO DESCONHECIDA //
     log.error(`[UserController] ${error}`)
     return this.simpleResponse(res, {
       message: 'Internal server error',
       status: 500
     })
-  }
-
-  public badRequest (message: string): ValidationError {
-    // EMITE UM 'THROW' PARA TRATAMENTO DE CASOS DE ERRO 'BAD REQUEST'
-    return new ValidationError(message)
   }
 }
 

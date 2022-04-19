@@ -2,9 +2,12 @@ import { Request, Response } from 'express'
 import { object, string, ObjectSchema, array, number } from 'yup'
 import { IController } from '../interfaces/IController'
 import { IUser } from '../interfaces/IUser'
+
+// SERVICES //
 import log from '../services/Logger'
 import ResponseManager from '../services/ResponseManager'
 
+// DOMANIS //
 import User from '../domains/User'
 import Role from '../domains/Role'
 
@@ -119,9 +122,11 @@ class UserController implements IController {
     log.debug('[UserController] Executing find endpoint.')
     try {
       let response : User | User[]
-      if (req.params.id) {
+      const id = req.params.id
+      if (id) {
         // BUSCA USUÁRIO PELA PRIMARY KEY //
-        response = await User.findByPk(req.params.id, { include: Role })
+        response = await User.findByPk(id, { include: Role })
+        if (!response) throw ResponseManager.badRequest(`User with id: ${id}, does not exist`)
       } else {
         // BUSCA TODOS OS ELEMENTOS DA BASE SEM FILTRO //
         response = await User.findAll({ include: Role })

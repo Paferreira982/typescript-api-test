@@ -14,7 +14,6 @@ class PasswordSecurity {
 
     public verify (password: string, hashedPassword: string): boolean {
       // COMPARA UMA STRING NÃO ENCRIPTADA COM SUA RESPECTIVA STRING ENCRIPTADA DA BASE //
-      // TRUE CASO SEJAM AS MESMA E FALSE CASO NÃO //
       return bcrypt.compareSync(password, hashedPassword)
     }
 }

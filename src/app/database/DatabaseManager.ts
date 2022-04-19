@@ -4,7 +4,14 @@ import log from '../services/Logger'
 import Role from '../domains/Role'
 import User from '../domains/User'
 
+/**
+ * @author Pedro Augusto
+ * @description Managment of default config to database.
+ */
 class DatabaseManager extends Database {
+  /**
+  * @description Create a database if not existis yet.
+  */
   public async createDatabase (): Promise<void> {
     log.debug('[DatabaseManager] Creating database if not exists.')
     const pool = mariadb.createPool({
@@ -26,6 +33,9 @@ class DatabaseManager extends Database {
     }
   }
 
+  /**
+  * @description Prepare default user and roles for first instance of database.
+  */
   public async prepareDatabase (): Promise<void> {
     log.info('[DatabaseManager] Preparing database.')
 

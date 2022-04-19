@@ -1,6 +1,10 @@
 import { Sequelize } from 'sequelize'
 import Database from '../domains/Database'
 
+/**
+ * @author Pedro Augusto
+ * @description Managment of Sequelize config.
+ */
 class SequelizeConfig extends Database {
     public sequelize: Sequelize
 

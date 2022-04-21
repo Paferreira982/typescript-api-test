@@ -1,7 +1,7 @@
 // DEPENDENCIES //
 import { Response } from 'express'
 import { ValidationError } from 'yup'
-import { UniqueConstraintError } from 'sequelize'
+import { UniqueConstraintError, DatabaseError } from 'sequelize'
 
 // INTERFACES //
 import { ISimpleReponse } from '../domains/interfaces/IRespose'
@@ -53,6 +53,15 @@ class ResponseManager {
     if (error instanceof ValidationError) {
       return this.simpleResponse(res, {
         message: `BadRequest: ${error.errors}`,
+        status: 400
+      })
+    }
+
+    if (error instanceof DatabaseError) {
+      return this.simpleResponse(res, {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        message: `BadRequest: ${error.parent.text}`,
         status: 400
       })
     }

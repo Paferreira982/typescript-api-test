@@ -135,22 +135,18 @@ class UserController implements IController {
 
   /**
   * @description Find an existing entity in the database.
-  * @param req Can recieve an id param from request, otherwise returns all entitys.
+  * @param req Recive a filter from request, otherwise returns all entitys.
   * @returns Return an list of user or an user if has an id param.
   */
   public async find (req: Request, res: Response): Promise<Response> {
     log.debug('[UserController] Executing find endpoint.')
     try {
-      let response : User | User[]
-      const id = req.params.id
-      if (id) {
-        // BUSCA USUÁRIO PELA PRIMARY KEY //
-        response = await User.findByPk(id, { include: Role })
-        if (!response) throw ResponseManager.badRequest(`User with id: ${id}, does not exist`)
-      } else {
-        // BUSCA TODOS OS ELEMENTOS DA BASE SEM FILTRO //
-        response = await User.findAll({ include: Role })
-      }
+      const params = req.query
+      const response = await User.findAll({ where: params, include: Role })
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (!response || response.length === 0) throw ResponseManager.badRequest(`User with ${JSON.stringify(params).replaceAll('"', '').replaceAll('{', '').replaceAll('}', '').replaceAll(':', ': ')}, does not exist`)
 
       return res.status(200).json(response).end()
     } catch (error: unknown) {

@@ -3,7 +3,7 @@ import { Model, DataTypes } from 'sequelize'
 import sequelize from '../database/SequelizeConfig'
 
 // INTERFACES //
-import { IUser } from '../interfaces/IUser'
+import { IUser } from './interfaces/IUser'
 
 // SERVICES //
 import PasswordSecurity from '../services/security/PasswordSecurity'

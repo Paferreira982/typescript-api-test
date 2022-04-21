@@ -4,7 +4,7 @@ import { ValidationError } from 'yup'
 import { UniqueConstraintError } from 'sequelize'
 
 // INTERFACES //
-import { ISimpleReponse } from '../interfaces/IRespose'
+import { ISimpleReponse } from '../domains/interfaces/IRespose'
 
 // SERVICES //
 import log from './Logger'

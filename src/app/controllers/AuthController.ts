@@ -3,7 +3,7 @@ import { object, string, ObjectSchema } from 'yup'
 import { Request, Response } from 'express'
 
 // INTERFACES //
-import { IAuth } from '../interfaces/IUser'
+import { IAuth } from '../domains/interfaces/IUser'
 
 // SERVICES //
 import PasswordSecurity from '../services/security/PasswordSecurity'

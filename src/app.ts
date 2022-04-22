@@ -4,6 +4,7 @@ import router from './routes'
 import cors from 'cors'
 import DatabaseManager from './app/database/DatabaseManager'
 import sequelize from './app/database/SequelizeConfig'
+import decodeRoutes from './app/services/ExpressDecoder'
 
 // SERVICES //
 import log from './app/services/Logger'
@@ -14,11 +15,13 @@ import log from './app/services/Logger'
  */
 class App {
   public express: express.Application
+  private endpoints: string[]
 
   public constructor () {
     log.info('[App] Initializing App.')
 
     this.express = express()
+    this.endpoints = decodeRoutes()
     this.middlewares()
   }
 
@@ -41,7 +44,7 @@ class App {
   private async database (): Promise<void> {
     await DatabaseManager.createDatabase()
     await sequelize.sync()
-    await DatabaseManager.prepareDatabase()
+    await DatabaseManager.prepareDatabase(this.endpoints)
   }
 }
 

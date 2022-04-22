@@ -1,0 +1,9 @@
+{
+    "actions": 
+    [
+        {
+            "name": "Gerenciar usuários",
+            "path": "ritter/api/users"
+        }
+    ]
+}

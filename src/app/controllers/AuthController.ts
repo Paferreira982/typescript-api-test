@@ -11,8 +11,8 @@ import ResponseManager from '../services/ResponseManager'
 import JwtSecurity from '../services/security/JwtSecurity'
 
 // DOMAINS //
-import User from '../domains/User'
-import Role from '../domains/Role'
+import User from '../models/User'
+import Profile from '../models/Profile'
 
 /**
  * @author Pedro Augusto
@@ -36,7 +36,7 @@ class AuthController {
     try {
       await schema.validate(body)
 
-      const user = await User.findOne({ where: { username: body.username }, include: Role })
+      const user = await User.findOne({ where: { username: body.username }, include: Profile })
       if (!user || !PasswordSecurity.verify(body.password, user.password)) throw ResponseManager.badRequest('wrong username or password.')
 
       const token = JwtSecurity.sign({ userId: user.id })

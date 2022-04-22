@@ -3,13 +3,13 @@ import { Model, DataTypes } from 'sequelize'
 import sequelize from '../database/SequelizeConfig'
 
 // INTERFACES //
-import { IUser } from './interfaces/IUser'
+import { IUser } from '../domains/interfaces/IUser'
 
 // SERVICES //
 import PasswordSecurity from '../services/security/PasswordSecurity'
 
 // DOMAINS //
-import Role from './Role'
+import Profile from './Profile'
 
 /**
  * @author Pedro Augusto
@@ -24,7 +24,7 @@ class User extends Model implements IUser {
   declare telephone: string | null
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setRoles: any
+  setProfile: any
 }
 
 User.init(
@@ -68,9 +68,9 @@ User.init(
   {
     tableName: 'users',
     sequelize
-  })
+  }
+)
 
-User.belongsToMany(Role, { through: 'users_roles' })
-Role.belongsToMany(User, { through: 'users_roles' })
+User.belongsTo(Profile)
 
 export default User

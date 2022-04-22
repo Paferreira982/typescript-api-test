@@ -1,13 +1,10 @@
-// DEPENDENCIES //
 import Database from '../domains/Database'
 import mariadb from 'mariadb'
-
-// SERVICES //
 import log from '../services/Logger'
-
-// DOMAINS
-import Role from '../domains/Role'
-import User from '../domains/User'
+import Profile from '../models/Profile'
+import User from '../models/User'
+import Action from '../models/Action'
+import * as fs from 'fs'
 
 /**
  * @author Pedro Augusto
@@ -18,7 +15,6 @@ class DatabaseManager extends Database {
   * @description Create a database if not existis yet.
   */
   public async createDatabase (): Promise<void> {
-    log.debug('[DatabaseManager] Creating database if not exists.')
     const pool = mariadb.createPool({
       host: this.host,
       user: this.dbUsername,
@@ -41,44 +37,91 @@ class DatabaseManager extends Database {
   /**
   * @description Prepare default user and roles for first instance of database.
   */
-  public async prepareDatabase (): Promise<void> {
-    log.info('[DatabaseManager] Preparing database.')
+  public async prepareDatabase (endpoints: string[]): Promise<void> {
+    const admin = await User.findAll()
+    const profiles = await Profile.findAll()
+    let prepared = true
+
+    this.verifyEndpoints(endpoints)
+
+    if (admin.length === 0 || profiles.length === 0) {
+      prepared = false
+      log.info('[DatabaseManager] Preparing database.')
+    }
+
+    // CRIANDO ACTIONS NA BASE DE DADOS //
+    await this.createActions()
 
     // CRIANDO ROLES DEFAULT NA BASE DE DADOS //
-    log.debug('[DatabaseManager] Creating default roles.')
-    const roles = await Role.findAll()
-    if (!roles || roles.length === 0) {
-      this.roles.forEach(async (role: string) => {
-        const obj = Role.build({ name: role })
-        await obj.save()
-      })
-    }
-    log.debug('[DatabaseManager] Default roles created.')
+    if (profiles.length === 0) { await this.createDefaultProfile() }
 
     // CRIANDO USUÁRIO ADMINISTRADOR PADRÃO //
-    const admin = await User.findOne({ where: { name: this.username } })
-    if (!admin) {
-      log.debug('[DatabaseManager] Creating default user.')
+    if (admin.length === 0) { await this.createDefaultUser() }
 
-      const role = await Role.findOne({ where: { name: this.roles[0] } })
-      await User.create({
-        name: this.username,
-        username: this.username,
-        password: this.password,
-        email: this.email,
-        telephone: this.telephone
-      })
+    if (!prepared) log.info('[DatabaseManager] Database prepared.')
+  }
 
-      await User.findOne({ where: { username: this.username } }).then((user) => {
-        user.setRoles([role])
-      }).finally(() => {
-        log.debug('[DatabaseManager] Default user created.')
-      }).catch((error) => {
-        log.error(`[DatabaseManager] Error while creating default user: ${error}`)
-      })
+  private verifyEndpoints (endpoints: string[]): void {
+    const config = JSON.parse(fs.readFileSync(this.pathToActions, 'utf-8'))
+    for (const i in endpoints) {
+      let exist = false
+      for (const j in config.actions) {
+        if (endpoints[i] === config.actions[j].path || this.notRequireAuthPaths.includes(endpoints[i].replace(this.rootPath, ''))) { exist = true; break }
+      }
+
+      if (!exist) {
+        log.warn(`[DatabaseManager] Endpoint action '${endpoints[i]}' not in json config file.`)
+      }
+    }
+  }
+
+  private async createActions (): Promise<void> {
+    const actions = await Action.findAll()
+    const config = JSON.parse(fs.readFileSync(this.pathToActions, 'utf-8'))
+    let newActions = []
+
+    if (actions) {
+      for (const i in config.actions) {
+        let exist = false
+        for (const j in actions) {
+          if (config.actions[i].name === actions[j].name) { exist = true; break }
+        }
+        if (!exist) newActions.push(config.actions[i])
+      }
+    } else {
+      newActions = [...config.actions]
     }
 
-    log.info('[DatabaseManager] Database prepared.')
+    if (newActions.length > 0) log.debug('[DatabaseManager] Creating actions.')
+
+    newActions.forEach(async (config) => {
+      const action = Action.build(config)
+      await action.save()
+    })
+  }
+
+  private async createDefaultProfile (): Promise<void> {
+    log.debug('[DatabaseManager] Creating default profile.')
+    const profile = Profile.build({ name: this.profile })
+    await profile.save()
+    await profile.setActions(await Action.findAll())
+  }
+
+  private async createDefaultUser (): Promise<void> {
+    log.debug('[DatabaseManager] Creating default user.')
+
+    const profile = await Profile.findOne({ where: { name: this.profile } })
+    await User.create({
+      name: this.username,
+      username: this.username,
+      password: this.password,
+      email: this.email,
+      telephone: this.telephone
+    })
+
+    await User.findOne({ where: { username: this.username } }).then(async (user) => {
+      await user.setProfile(profile)
+    })
   }
 }
 

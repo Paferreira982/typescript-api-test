@@ -16,7 +16,12 @@ class Database {
     protected password: string
     protected email: string
     protected telephone: string
-    protected roles: string[]
+
+    // OUTRAS CONFIGURAÇÕES //
+    protected profile = 'Administrador do sistema'
+    protected pathToActions = './src/app/config/actions.json'
+    protected notRequireAuthPaths = ['auth']
+    protected rootPath = 'ritter/api/'
 
     public constructor () {
       // SETTING DATABASE VARIABLES //
@@ -32,7 +37,6 @@ class Database {
       this.password = process.env.USER_PASSWORD || 'admin123'
       this.email = process.env.USER_EMAIL || 'contato@paferreira.com'
       this.telephone = process.env.USER_TEL || '21992540982'
-      this.roles = ['ROLE_ADMIN', 'ROLE_USER']
     }
 }
 

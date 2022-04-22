@@ -1,6 +1,6 @@
 // DEPENDENCIES //
 import { Request, Response } from 'express'
-import { object, string, ObjectSchema, array, number } from 'yup'
+import { object, string, ObjectSchema, number } from 'yup'
 
 // INTERFACES //
 import { IController } from '../domains/interfaces/IController'
@@ -11,8 +11,8 @@ import log from '../services/Logger'
 import ResponseManager from '../services/ResponseManager'
 
 // DOMANIS //
-import User from '../domains/User'
-import Role from '../domains/Role'
+import User from '../models/User'
+import Profile from '../models/Profile'
 
 /**
  * @author Pedro Augusto
@@ -27,7 +27,7 @@ class UserController implements IController {
     log.debug('[UserController] Executing create endpoint.')
 
     const body = req.body
-    let roles: Role[]
+    let profile: Profile
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -37,31 +37,24 @@ class UserController implements IController {
       password: string().required(),
       email: string().notRequired(),
       telephone: string().notRequired(),
-      roles: array().of(string().strict()).notRequired()
+      profile: string().strict().notRequired()
     })
 
     try {
       // VALIDA O SCHEMA DESCRITO ACIMA //
       await schema.validate(body)
 
-      // VERIFICA SE ROLES FOI PASSADO COMO PARÂMETRO DENTRO DO BODY //
-      // SE SIM, PREENCHE UMA LISTA DE OBJETO 'ROLE' //
-      if (body.roles) {
-        for (const i in body.roles) {
-          const name = body.roles[i]
-          const role = await Role.findOne({ where: { name: name } })
+      if (body.profile) {
+        const name = body.profile
+        profile = await Profile.findOne({ where: { name: name } })
 
-          // DELEGA RESPOSTA DE ERRO PARA O SERVICE CASO NÃO ENCONTRE A ROLE MENCIONADA //
-          if (!role) throw ResponseManager.badRequest(`the role '${name}' does not exist`)
-
-          if (!roles) roles = [role]
-          else roles.push(role)
-        }
+        // DELEGA RESPOSTA DE ERRO PARA O SERVICE CASO NÃO ENCONTRE A ROLE MENCIONADA //
+        if (!profile) throw ResponseManager.badRequest(`the profile '${name}' does not exist`)
       }
 
       // CRIA O USUÁRIO NO BANCO DE DADOS DE ACORDO COM OS PARÂMETROS PASSADOS //
       await User.create(body).then((user) => {
-        if (roles && roles.length > 0) user.setRoles(roles)
+        if (profile) user.setProfile(profile)
       })
 
       // DELEGA RESPOSTA DE CASO BEM SUCEDIDO PARA O SERVICE //
@@ -93,7 +86,7 @@ class UserController implements IController {
       password: string().notRequired(),
       email: string().notRequired(),
       telephone: string().notRequired(),
-      roles: array().of(string().strict()).notRequired()
+      profile: string().strict().notRequired()
     })
 
     try {
@@ -105,20 +98,14 @@ class UserController implements IController {
       if (!user) throw ResponseManager.badRequest(`the user with id = ${body.id}, does not exist`)
 
       // ATUALIZA O USUÁRIO MENCIONADO COM OS PARÂMETROS ENVIADOS //
-      await User.findOne({ where: { id: body.id }, include: Role }).then(async (user) => {
+      await User.findOne({ where: { id: body.id }, include: Profile }).then(async (user) => {
         await user.update(body)
 
-        let roles : Role[]
-        if (body.roles) {
-          for (const i in body.roles) {
-            const role = await Role.findOne({ where: { name: body.roles[i] } })
-            if (!role) throw ResponseManager.badRequest(`the role '${body.roles[i]}' does not exist`)
+        if (body.profile) {
+          const profile = await Profile.findOne({ where: { name: body.profile } })
+          if (!profile) throw ResponseManager.badRequest(`the profile '${body.profile}' does not exist`)
 
-            if (!roles) roles = [role]
-            else roles.push(role)
-          }
-
-          await user.setRoles(roles)
+          await user.setProfile(profile)
         }
       })
 
@@ -142,7 +129,7 @@ class UserController implements IController {
     log.debug('[UserController] Executing find endpoint.')
     try {
       const params = req.query
-      const response = await User.findAll({ where: params, include: Role })
+      const response = await User.findAll({ where: params, include: Profile })
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

@@ -1,6 +1,6 @@
 {
   "name": "ritter-api",
-  "version": "0.0.5",
+  "version": "0.1.6",
   "description": "Api for Ritter's project",
   "main": "index.js",
   "scripts": {

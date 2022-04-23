@@ -3,7 +3,6 @@ import express from 'express'
 
 // SERVICES //
 import UserController from '../controllers/UserController'
-// import Validator from '../services/Validator'
 
 const router = express.Router()
 

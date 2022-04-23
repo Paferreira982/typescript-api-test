@@ -28,8 +28,16 @@ class JwtSecurity {
     * @param token A jwt token.
     * @returns Returns a string containing an error of a JwtPayload object.
     */
-    public verify (token: string) : string | JwtPayload {
-      return jwt.verify(token, this.secret)
+    public verify (token: string | string[]) : string | JwtPayload {
+      if (token instanceof Array) token = token[0]
+
+      let decoded: string | JwtPayload
+      jwt.verify(token, this.secret, (err, payload) => {
+        if (err) decoded = ''
+        else decoded = payload
+      })
+
+      return decoded
     }
 }
 

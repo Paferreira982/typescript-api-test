@@ -1,5 +1,6 @@
 // DEPENDENCIES //
 import express from 'express'
+import Validator from './app/services/Validator'
 
 // SERVICES //
 import AuthRote from './app/routes/AuthRote'
@@ -9,6 +10,6 @@ const router = express.Router()
 const path = '/ritter/api'
 
 router.use(`${path}/auth`, AuthRote)
-router.use(`${path}/users`, UserRoute)
+router.use(`${path}/users`, Validator.validateRequest, UserRoute)
 
 export default router

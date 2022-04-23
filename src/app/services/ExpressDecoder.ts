@@ -14,7 +14,7 @@ const capture = (path: any, layer: any): void => {
   } else if (layer.name === 'router' && layer.handle.stack) {
     layer.handle.stack.forEach(capture.bind(null, path.concat(split(layer.regexp))))
   } else if (layer.method) {
-    const route = path.concat(split(layer.regexp)).filter(Boolean).join('/').split('/:')[0]
+    const route = '/' + path.concat(split(layer.regexp)).filter(Boolean).join('/').split('/:')[0]
     if (!endpoints.includes(route)) endpoints.push(route)
   }
 }

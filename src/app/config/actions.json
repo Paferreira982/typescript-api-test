@@ -3,7 +3,7 @@
     [
         {
             "name": "Gerenciar usuários",
-            "path": "ritter/api/users"
+            "path": "/ritter/api/users"
         }
     ]
 }

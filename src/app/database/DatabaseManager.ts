@@ -66,7 +66,7 @@ class DatabaseManager extends Database {
     for (const i in endpoints) {
       let exist = false
       for (const j in config.actions) {
-        if (endpoints[i] === config.actions[j].path || this.notRequireAuthPaths.includes(endpoints[i].replace(this.rootPath, ''))) { exist = true; break }
+        if (endpoints[i] === config.actions[j].path) { exist = true; break }
       }
 
       if (!exist) {
@@ -86,7 +86,7 @@ class DatabaseManager extends Database {
         for (const j in actions) {
           if (config.actions[i].name === actions[j].name) { exist = true; break }
         }
-        if (!exist) newActions.push(config.actions[i])
+        if (!exist && config.actions[i].auth) newActions.push(config.actions[i])
       }
     } else {
       newActions = [...config.actions]

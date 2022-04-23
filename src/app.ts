@@ -1,4 +1,3 @@
-// DEPENDENCIES //
 import express from 'express'
 import router from './routes'
 import cors from 'cors'
@@ -6,7 +5,6 @@ import DatabaseManager from './app/database/DatabaseManager'
 import sequelize from './app/database/SequelizeConfig'
 import decodeRoutes from './app/services/ExpressDecoder'
 
-// SERVICES //
 import log from './app/services/Logger'
 
 /**

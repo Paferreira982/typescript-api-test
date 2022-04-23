@@ -19,8 +19,7 @@ class Database {
 
     // OUTRAS CONFIGURAÇÕES //
     protected profile = 'Administrador do sistema'
-    protected pathToActions = './src/app/config/actions.json'
-    protected notRequireAuthPaths = ['auth']
+    protected pathToActions = './src/app/.config/.actions.json'
     protected rootPath = '/ritter/api/'
 
     public constructor () {

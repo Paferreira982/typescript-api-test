@@ -1,15 +1,9 @@
-// DEPENDENCIES //
 import { Response } from 'express'
 import { ValidationError } from 'yup'
 import { UniqueConstraintError, DatabaseError } from 'sequelize'
-
-// INTERFACES //
 import { ISimpleReponse } from '../domains/interfaces/IRespose'
 
-// SERVICES //
 import log from './Logger'
-
-// DOMAINS //
 import UnauthorizedError from '../domains/UnauthorizedError'
 
 /**

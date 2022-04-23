@@ -1,7 +1,4 @@
-// DEPENDENCIES //
 import express from 'express'
-
-// SERVICES //
 import UserController from '../controllers/UserController'
 
 const router = express.Router()

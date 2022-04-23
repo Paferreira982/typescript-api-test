@@ -1,4 +1,3 @@
-// DEPENDENCIES //
 import bcrypt from 'bcrypt'
 
 /**

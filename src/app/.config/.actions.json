@@ -1,0 +1,15 @@
+{
+    "actions": 
+    [
+        {
+            "name": "Gerenciar usuários",
+            "path": "/ritter/api/users",
+            "auth": true
+        },
+        {
+            "name": "Autenticar-se",
+            "path": "/ritter/api/auth",
+            "auth": false
+        }
+    ]
+}

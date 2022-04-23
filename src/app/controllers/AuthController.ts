@@ -1,16 +1,11 @@
-// DEPENDENCIES //
 import { object, string, ObjectSchema } from 'yup'
 import { Request, Response } from 'express'
-
-// INTERFACES //
 import { IAuth } from '../domains/interfaces/IUser'
 
-// SERVICES //
 import PasswordSecurity from '../services/security/PasswordSecurity'
 import ResponseManager from '../services/ResponseManager'
 import JwtSecurity from '../services/security/JwtSecurity'
 
-// DOMAINS //
 import User from '../models/User'
 import Profile from '../models/Profile'
 

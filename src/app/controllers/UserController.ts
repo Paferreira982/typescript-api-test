@@ -1,16 +1,12 @@
-// DEPENDENCIES //
 import { Request, Response } from 'express'
 import { object, string, ObjectSchema, number } from 'yup'
 
-// INTERFACES //
 import { IController } from '../domains/interfaces/IController'
 import { IUser } from '../domains/interfaces/IUser'
 
-// SERVICES //
 import log from '../services/Logger'
 import ResponseManager from '../services/ResponseManager'
 
-// DOMANIS //
 import User from '../models/User'
 import Profile from '../models/Profile'
 

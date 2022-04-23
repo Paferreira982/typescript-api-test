@@ -1,4 +1,3 @@
-// DEPENDENCIES //
 import * as logger from 'simple-node-logger'
 
 /**

@@ -1,8 +1,6 @@
-// DEPENDENCIES //
 import express from 'express'
 import Validator from './app/services/Validator'
 
-// SERVICES //
 import AuthRote from './app/routes/AuthRote'
 import UserRoute from './app/routes/UserRoute'
 

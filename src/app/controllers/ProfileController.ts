@@ -114,7 +114,7 @@ class ProfileController implements IController {
   /**
     * @description Find an existing entity in the database.
     * @param req Recive a filter from request, otherwise returns all entitys.
-    * @returns Return an list of user or an user if has an id param.
+    * @returns Return an list of profiles or a profile if has an id param.
     */
   public async find (req: Request, res: Response): Promise<Response> {
     log.debug('[ProfileController] Executing find endpoint.')

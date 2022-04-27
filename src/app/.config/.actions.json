@@ -7,6 +7,11 @@
             "auth": true
         },
         {
+            "name": "Gerencias perfis",
+            "path": "/ritter/api/profiles",
+            "auth": true
+        },
+        {
             "name": "Autenticar-se",
             "path": "/ritter/api/auth",
             "auth": false

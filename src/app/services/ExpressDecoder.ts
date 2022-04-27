@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import router from '../../routes'
+import router from '../../router'
 
 const endpoints = []
 

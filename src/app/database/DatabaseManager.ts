@@ -50,10 +50,10 @@ class DatabaseManager extends Database {
     }
 
     // CRIANDO ACTIONS NA BASE DE DADOS //
-    await this.createActions()
+    const newActions = await this.createActions()
 
-    // CRIANDO ROLES DEFAULT NA BASE DE DADOS //
-    if (profiles.length === 0) { await this.createDefaultProfile() }
+    // CRIANDO PROFILE DEFAULT NA BASE DE DADOS //
+    if (profiles.length === 0 || newActions) { await this.createDefaultProfile() }
 
     // CRIANDO USUÁRIO ADMINISTRADOR PADRÃO //
     if (admin.length === 0) { await this.createDefaultUser() }
@@ -75,7 +75,7 @@ class DatabaseManager extends Database {
     }
   }
 
-  private async createActions (): Promise<void> {
+  private async createActions (): Promise<boolean> {
     const actions = await Action.findAll()
     const config = JSON.parse(fs.readFileSync(this.pathToActions, 'utf-8'))
     let newActions = []
@@ -98,13 +98,14 @@ class DatabaseManager extends Database {
       const action = Action.build(config)
       await action.save()
     })
+
+    return (newActions.length > 0)
   }
 
   private async createDefaultProfile (): Promise<void> {
-    log.debug('[DatabaseManager] Creating default profile.')
-    const profile = Profile.build({ name: this.profile })
-    await profile.save()
-    await profile.setActions(await Action.findAll())
+    log.debug('[DatabaseManager] Creating/Updating default profile.')
+    const profile = await Profile.findOrCreate({ where: { name: this.profile } })
+    await profile[0].setActions(await Action.findAll())
   }
 
   private async createDefaultUser (): Promise<void> {

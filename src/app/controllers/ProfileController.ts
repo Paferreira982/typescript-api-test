@@ -7,7 +7,6 @@ import { IProfile } from '../domains/interfaces/IProfile'
 import log from '../services/Logger'
 import ResponseManager from '../services/ResponseManager'
 
-import User from '../models/User'
 import Profile from '../models/Profile'
 import Action from '../models/Action'
 
@@ -140,17 +139,17 @@ class ProfileController implements IController {
     * @returns Return a payload of a simple response.
     */
   public async delete (req: Request, res: Response): Promise<Response> {
-    log.debug('[UserController] Executing delete endpoint.')
+    log.debug('[ProfileController] Executing delete endpoint.')
     try {
       const id = req.params.id
-      const deleted = (await User.destroy({ where: { id: id } }) > 0)
+      const deleted = (await Profile.destroy({ where: { id: id } }) > 0)
 
       // DELEGA RESPOSTA DE ERRO PARA O SERVICE CASO NÃO ENCONTRE O USUÁRIO MENCIONADO //
-      if (!deleted) throw ResponseManager.badRequest(`User with id: ${id}, does not exist`)
+      if (!deleted) throw ResponseManager.badRequest(`Profile with id: ${id}, does not exist`)
 
       // DELEGA RESPOSTA DE CASO BEM SUCEDIDO PARA O SERVICE //
       return ResponseManager.simpleResponse(res, {
-        message: `User with ${id} deleted with success.`,
+        message: `Profile with ${id} deleted with success.`,
         status: 200
       })
     } catch (error: unknown) {

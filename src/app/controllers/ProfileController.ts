@@ -118,14 +118,14 @@ class ProfileController implements IController {
     * @returns Return an list of user or an user if has an id param.
     */
   public async find (req: Request, res: Response): Promise<Response> {
-    log.debug('[UserController] Executing find endpoint.')
+    log.debug('[ProfileController] Executing find endpoint.')
     try {
       const params = req.query
-      const response = await User.findAll({ where: params, include: Profile })
+      const response = await Profile.findAll({ where: params, include: Action })
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      if (!response || response.length === 0) throw ResponseManager.badRequest(`User with ${JSON.stringify(params).replaceAll('"', '').replaceAll('{', '').replaceAll('}', '').replaceAll(':', ': ')}, does not exist`)
+      if (!response || response.length === 0) throw ResponseManager.badRequest(`Profile with ${JSON.stringify(params).replaceAll('"', '').replaceAll('{', '').replaceAll('}', '').replaceAll(':', ': ')}, does not exist`)
 
       return res.status(200).json(response).end()
     } catch (error: unknown) {
